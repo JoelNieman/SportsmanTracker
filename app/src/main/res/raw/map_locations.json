@@ -1,0 +1,66 @@
+{ 
+	"MapLocations": [
+
+{
+  "name": "Meyer May House",
+  "Lat": 42.954224,
+  "Lng": -85.658780
+},
+
+{
+  "name": "Art Prize",
+  "Lat": 42.963360,
+  "Lng": -85.668086
+},
+
+{
+  "name": "Leonardo da Vinci's Horse",
+  "Lat": 42.979472,
+  "Lng": -85.585652
+},
+
+{
+  "name": "Grand Rapids Art Museum",
+  "Lat": 42.965091,
+  "Lng": -85.671022
+},
+
+{
+  "name": "Heritage Hill Historic District",
+  "Lat": 42.960335,
+  "Lng": -85.656755
+},
+
+{
+  "name": "Fish Ladder",
+  "Lat": 42.975013,
+  "Lng": -85.675790
+},
+
+{
+  "name": "La Grande Vitesse",
+  "Lat": 42.968939,
+  "Lng": -85.670617
+},
+
+{
+  "name": "Aquinas College",
+  "Lat": 42.959700,
+  "Lng": -85.628924
+},
+
+{
+  "name": "Cathedral of Saint Andrew",
+  "Lat": 42.958108,
+  "Lng": -85.667132
+},
+
+{
+  "name": "DeVos Place",
+  "Lat": 42.968842,
+  "Lng": -85.672145
+}
+]
+}
+
+

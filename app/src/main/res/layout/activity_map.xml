@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapActivity">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:style_url="mapbox://styles/mapbox/streets-v9"
+        app:center_latitude="42.963360"
+        app:center_longitude="-85.668086"
+        app:zoom="11" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/crosshairs"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/icon_crosshair"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/zoomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/newPin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="0dp"
+        android:elevation="0dp"
+        app:srcCompat="@drawable/icon_location_set"
+        app:backgroundTint="@android:color/white"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/newPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="0dp"
+        android:elevation="0dp"
+        app:srcCompat="@drawable/icon_location_add"
+        app:backgroundTint="@color/colorPrimary"
+        />
+
+
+</RelativeLayout>
+

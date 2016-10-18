@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/tooltip_layout">
+
+    <TextView
+        android:id="@+id/location_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Joel's House"
+        android:layout_centerVertical="true"
+        />
+
+    <ImageButton
+        android:id="@+id/information_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_info_outline_black_24dp"
+        android:layout_toRightOf="@id/location_title"
+        />
+
+    <com.mapbox.mapboxsdk.views.TipView
+        android:layout_width="132dp"
+        android:layout_height="10dp"/>
+
+</RelativeLayout>
