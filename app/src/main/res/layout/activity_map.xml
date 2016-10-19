@@ -24,20 +24,7 @@
         app:srcCompat="@drawable/icon_crosshair"
         />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/zoomButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_above="@+id/newPin"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:padding="0dp"
-        android:elevation="0dp"
-        app:srcCompat="@drawable/icon_location_set"
-        app:backgroundTint="@android:color/white"
-        />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/newPin"
@@ -51,9 +38,27 @@
         android:layout_marginRight="16dp"
         android:padding="0dp"
         android:elevation="0dp"
+        app:useCompatPadding="false"
         app:srcCompat="@drawable/icon_location_add"
         app:backgroundTint="@color/colorPrimary"
         />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/zoomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_above="@id/newPin"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="0dp"
+            android:elevation="0dp"
+            app:useCompatPadding="false"
+            app:srcCompat="@drawable/icon_location_set"
+            app:backgroundTint="@android:color/white"
+            />
 
 
 </RelativeLayout>

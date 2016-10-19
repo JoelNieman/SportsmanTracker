@@ -1,6 +1,7 @@
 package app.com.joel.sportsmantracker;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -47,11 +48,9 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import java.util.ArrayList;
 
+import static app.com.joel.sportsmantracker.R.id.newPin;
+
 public class MapActivity extends AppCompatActivity {
-
-    private static final int LOCATION_TITLE = 0;
-    private static final int INFORMATION_ICON = 1;
-
 
     private MapView mapView;
     private MapboxMap map;
@@ -66,8 +65,6 @@ public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
 
         mapLocationsDAO = sMapLocationsDAO.getMapLocationsDAO();
@@ -75,13 +72,11 @@ public class MapActivity extends AppCompatActivity {
         Resources resources = getResources();
         mapLocationsArrayList = mapLocationsDAO.loadMapLocations(resources);
 
+        // currently using the mapbox public key
         MapboxAccountManager.start(this.getApplicationContext(), "pk.eyJ1IjoibmllbWFuam8iLCJhIjoiY2l1NXZldzdlMGhzNDJ5bGtiYzVqNm44cCJ9.hBQRfDJ0PSbTuzsfdIceNQ");
         locationServices = LocationServices.getLocationServices(this.getApplicationContext());
 
         setContentView(R.layout.activity_map);
-        setFloatingActionButtonIconColors();
-        setFloatingActionButtonElevationForPreLollipop();
-        setOnClickListenerForZoomButton();
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -91,19 +86,22 @@ public class MapActivity extends AppCompatActivity {
                 MapActivity.this.map = mapboxMap;
                 mapboxMap.setMyLocationEnabled(true);
                 toggleGps(true);
-                setMarkerInfoWindowAdapter();
+                createAndSetMarkerInfoWindowAdapter();
                 dropCustomPins(mapLocationsArrayList);
 
             }
         });
 
+        setFloatingActionButtonIconColors();
+        setFloatingActionButtonElevationForPreLollipop();
+        setOnClickListenerForZoomButton();
+        setOnClickListenerForNewPinButton();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
-
 
     }
 
@@ -153,17 +151,8 @@ public class MapActivity extends AppCompatActivity {
                 @Override
                 public void onLocationChanged(Location location) {
                     lastLocation = location;
-//
-//                    if (location != null) {
-//                        // Move the map camera to where the user location is
-//                        map.setCameraPosition(new CameraPosition.Builder()
-//                                .target(new LatLng(location))
-//                                .zoom(9)
-//                                .build());
-//                    }
                 }
             });
-            // Enable or disable the location layer on the map
             map.setMyLocationEnabled(enabled);
         } else {
             Toast.makeText(this, "Location not enabled", Toast.LENGTH_SHORT).show();
@@ -255,21 +244,38 @@ public class MapActivity extends AppCompatActivity {
 
 
     public void setFloatingActionButtonElevationForPreLollipop() {
-        FloatingActionButton newPinButton = (FloatingActionButton) findViewById(R.id.newPin);
-        FloatingActionButton zoomButton = (FloatingActionButton) findViewById(R.id.zoomButton);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            FloatingActionButton newPinButton = (FloatingActionButton) findViewById(newPin);
+            FloatingActionButton zoomButton = (FloatingActionButton) findViewById(R.id.zoomButton);
 
             zoomButton.setCompatElevation(0);
             newPinButton.setCompatElevation(0);
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) newPinButton.getLayoutParams();
-            params.setMargins(0, 0, 16, 16); // get rid of margins since shadow area is now the margin
-            newPinButton.setLayoutParams(params);
-            zoomButton.setLayoutParams(params);
+            ViewGroup.MarginLayoutParams zoomButtonParams = (ViewGroup.MarginLayoutParams) zoomButton.getLayoutParams();
+            zoomButtonParams.setMargins(0, 0, convertDpToPx(this, 16), 0);
+            zoomButton.setLayoutParams(zoomButtonParams);
+
+            ViewGroup.MarginLayoutParams newPinButtonParams = (ViewGroup.MarginLayoutParams) newPinButton.getLayoutParams();
+            newPinButtonParams.setMargins(0, 0, convertDpToPx(this, 16), convertDpToPx(this, 16));
+            newPinButton.setLayoutParams(newPinButtonParams);
         }
     }
 
+    public static int convertDpToPx(Context context, float dp) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) ((dp * scale) + 0.5f);
+    }
+
+    private void zoomToCurrentLocation(Location location) {
+        if (location != null) {
+            // Move the map to where the user location is
+            map.setCameraPosition(new CameraPosition.Builder()
+                    .target(new LatLng(lastLocation))
+                    .zoom(14)
+                    .build());
+        }
+    }
 
     public void setOnClickListenerForZoomButton() {
         FloatingActionButton zoomButton = (FloatingActionButton) findViewById(R.id.zoomButton);
@@ -284,21 +290,19 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
-    private void zoomToCurrentLocation(Location location) {
-        if (location != null) {
-            // Move the map camera to where the user location is
-            map.setCameraPosition(new CameraPosition.Builder()
-                    .target(new LatLng(lastLocation))
-                    .zoom(9)
-                    .build());
+    public void setOnClickListenerForNewPinButton() {
+        FloatingActionButton newPinButton = (FloatingActionButton) findViewById(R.id.newPin);
+
+        newPinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MapActivity.this, "addNewPin button pressed", Toast.LENGTH_SHORT).show();
             }
-        }
+        });
 
+    }
 
-
-
-
-    public void setMarkerInfoWindowAdapter() {
+    public void createAndSetMarkerInfoWindowAdapter() {
 
         map.setInfoWindowAdapter(new MapboxMap.InfoWindowAdapter() {
             @Nullable
@@ -320,10 +324,10 @@ public class MapActivity extends AppCompatActivity {
                 titleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 titleText.setTextColor(Color.BLACK);
 
-
                 ImageView infoIcon = new ImageView(MapActivity.this);
                 infoIcon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_info_outline_black_24dp, null));
 
+                // converting SP to pixels and using them to set the size of the information icon
                 float iconLeftMarginFloat = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics());
                 int iconLeftMarginInt = (int) iconLeftMarginFloat;
 
@@ -336,8 +340,10 @@ public class MapActivity extends AppCompatActivity {
                 infoIcon.setLayoutParams(iconParams);
                 iconParams.setMargins(iconLeftMarginInt,0,0,0);
 
+
                 ColorFilter darkBlueFilter = new LightingColorFilter(Color.argb(1, 2,107,158), Color.argb(1, 2,107,158));
                 infoIcon.setColorFilter(darkBlueFilter);
+
 
                 parentLayout.addView(titleText);
                 parentLayout.addView(infoIcon);
